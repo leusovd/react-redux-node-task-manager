@@ -1,0 +1,38 @@
+.todo-list-item {
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    &_btn-group {
+        .btn {
+            position: relative;
+            width: 42px;
+            height: 38px;
+
+            &:first-child {
+                margin: 0 5px 0 0;
+            }
+        }
+    }
+
+    &_label {
+        &.-important {
+            font-weight: bold;
+            color: steelblue;
+        }
+
+        &.-done {
+            text-decoration: line-through;
+        }
+    }
+}
+
+.icon > svg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: inline-block;
+}

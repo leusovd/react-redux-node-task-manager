@@ -1,0 +1,7 @@
+.app-header {
+    height: var(--header-height);
+}
+
+.btn-logout:focus {
+    box-shadow: none !important;
+}
