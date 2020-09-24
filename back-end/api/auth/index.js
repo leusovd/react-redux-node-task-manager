@@ -6,7 +6,7 @@ const { apiErrorHandler } = require('../../utils');
 
 const { checkDuplicateEmail } = verifySignup;
 
-router.post('/signup', signup);
+router.post('/signup', checkDuplicateEmail, signup);
 router.post('/signin', signin);
 
 router.use(apiErrorHandler);
