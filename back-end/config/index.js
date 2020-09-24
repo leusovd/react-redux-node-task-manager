@@ -13,7 +13,7 @@ module.exports = {
     apiKey: process.env.API_KEY,
 
     api: {
-        prefix: ''
+        prefix: '/api'
     },
 
     db: {

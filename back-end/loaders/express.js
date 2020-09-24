@@ -9,11 +9,7 @@ module.exports = ({ app }) => {
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
     
-    // app.use(config.api.prefix, api);
-
-    app.get('/', (req, res, next) => {
-        res.json({message: 'Welcome to todo-app!'});
-    });
+    app.use(config.api.prefix, api);
 
     // app.use((req, res, next) => {
     //     const err = new Error('Not Found');
