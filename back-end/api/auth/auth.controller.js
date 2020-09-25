@@ -7,10 +7,11 @@ exports.signup = async (req, res, next) => {
     try {
         user = await userService.signup({ email, password });
     } catch (err) {
-        return next(err);
+        next(err);
+        return;
     }
 
-    res.json({ status: 'ok', data: user });
+    res.json({ status: 'ok', payload: user });
 };
 
 exports.signin = async (req, res, next) => {
@@ -20,8 +21,9 @@ exports.signin = async (req, res, next) => {
     try {
         user = await userService.signin({ email, password });
     } catch (err) {
-        return next(err);
+        next(err);
+        return;
     }
 
-    res.json({ status: 'ok', data: user });
+    res.json({ status: 'ok', payload: user });
 };

@@ -1,5 +1,6 @@
 import { userConstants } from "../constants";
 import { userService } from '../services';
+import { addNewAlert } from './alerts.actions';
 
 const loginRequest = (user) => {
     return {
@@ -20,20 +21,6 @@ const loginFailure = (error) => {
         type: userConstants.LOGIN_FAILURE,
         payload: error
     }
-};
-
-const login = (dispatch) => {
-    return (email, password) => {
-        dispatch(loginRequest({ email }));
-
-        return userService.login(email, password)
-            .then((user) => {
-                dispatch(loginSuccess(user));
-            })
-            .catch((error) => {
-                dispatch(loginFailure(error));
-            });
-    };
 };
 
 const signupRequest = (user) => {
@@ -65,8 +52,26 @@ const signup = (dispatch) => {
             .then((user) => {
                 dispatch(signupSuccess(user));
             })
-            .catch((error) => {
-                dispatch(signupFailure(error));
+            .catch(({ message }) => {
+                dispatch(signupFailure(message));
+                addNewAlert(dispatch)(message);
+                throw new Error(message);
+            });
+    };
+};
+
+const login = (dispatch) => {
+    return (email, password) => {
+        dispatch(loginRequest({ email }));
+
+        return userService.login(email, password)
+            .then((user) => {
+                dispatch(loginSuccess(user));
+            })
+            .catch(({ message }) => {
+                dispatch(loginFailure(message));
+                addNewAlert(dispatch)(message);
+                throw new Error(message);
             });
     };
 };

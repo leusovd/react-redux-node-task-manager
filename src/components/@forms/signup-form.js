@@ -30,10 +30,13 @@ const validationSchema = Yup.object({
         }),
 });
 
-const SignupForm = ({ signup }) => {
+const SignupForm = ({ error, signup }) => {
 
-    const handleSubmit = ({ email, password }) => {
-        signup(email, password);
+    const handleSubmit = ({ email, password }, { resetForm, setFieldValue }) => {
+        signup(email, password).catch(() => {
+            resetForm();
+            setFieldValue('email', email);
+        });                    
     };
 
     return (
@@ -83,6 +86,9 @@ const SignupForm = ({ signup }) => {
     );
 };
 
+const mapStateToProps = ({ authentication: { error }}) => {
+    return { error };
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -90,4 +96,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 }
 
-export default connect(null, mapDispatchToProps)(SignupForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SignupForm);

@@ -22,8 +22,11 @@ const validationSchema = Yup.object({
 
 const LoginForm = ({ login }) => {
 
-    const handleSubmit = ({ email, password }) => {
-        login(email, password);
+    const handleSubmit = ({ email, password }, { resetForm, setFieldValue }) => {
+        login(email, password).catch(() => {
+            resetForm();
+            setFieldValue('email', email);
+        });
     };
 
     return (

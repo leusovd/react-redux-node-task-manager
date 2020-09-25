@@ -13,13 +13,13 @@
     }
 
     &_item {
-        width: 150px;
-        padding: 10px 15px;
+        max-width: 150px;
+        padding: 5px 10px;
         margin-top: 10px;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 22px;
         color: #fff;
-        text-align: center;
+        text-align: left;
         background: var(--c-danger);
         border-radius: 8px;
 

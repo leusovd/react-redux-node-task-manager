@@ -6,12 +6,14 @@ const verifyToken = (req, res, next) => {
     const token = req.headers['x-access-token'];
 
     if (!token) {
-        return res.status(403).json({ status: 'error', message: 'No token provided' });
+        res.status(403).json({ status: 'error', message: 'No token provided' });
+        return;
     }
 
     jwt.verify(token, apiKey, async (err, decoded) => {
         if (err) {
-            return res.status(401).json({ status: 'error', message: 'Unauthorized!' });
+            res.status(401).json({ status: 'error', message: 'Unauthorized!' });
+            return;
         }
 
         req.userId = decoded.id;
@@ -21,12 +23,14 @@ const verifyToken = (req, res, next) => {
 const isAdmin = (req, res, next) => {
     User.findById(req.userId).exec((err, user) => {
         if (err) {
-            return res.status(500).json({ status: 'error', message: err });
+            res.status(500).json({ status: 'error', message: err });
+            return;
         }
 
         Role.find({ _id: { $in: user.roles } }, (err, roles) => {
             if (err) {
-                return res.status(500).json({ status: 'error', message: err });
+                res.status(500).json({ status: 'error', message: err });
+                return;
             }
 
             if (roles.includes('admin')) {
@@ -34,8 +38,8 @@ const isAdmin = (req, res, next) => {
                 return;
             }
 
-            return res.status(403).json({ status: 'error', message: 'Wrong permissions!' });
-        })
+            res.status(403).json({ status: 'error', message: 'Wrong permissions!' });
+        });
     });
 };
 

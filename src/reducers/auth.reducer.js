@@ -34,6 +34,7 @@ const authenticate = (state = initialState, action) => {
             return {
                 isLoggedIn: false,
                 loading: false,
+                error: action.payload
             };
 
         case SIGNUP_REQUEST:
@@ -53,6 +54,7 @@ const authenticate = (state = initialState, action) => {
             return {
                 isLoggedIn: false,
                 loading: false,
+                error: action.payload
             };
 
         case LOGOUT:
