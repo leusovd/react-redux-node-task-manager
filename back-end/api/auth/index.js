@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const router = new Router();
+const { apiErrorHandler } = require('../../utils');
 const { signup, signin } = require('./auth.controller');
 const { verifySignup } = require('../../middlewares');
-const { apiErrorHandler } = require('../../utils');
 
 const { checkDuplicateEmail } = verifySignup;
 

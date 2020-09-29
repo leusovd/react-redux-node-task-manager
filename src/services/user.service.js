@@ -1,72 +1,61 @@
-import axios from 'axios';
+import * as api from './api.service';
 
-const apiUrl = process.env.REACT_APP_API_URL + '/auth';
+const authUri = "/auth";
 
 const signup = (email, password) => {
-    return axios.post(`${apiUrl}/signup`, { email, password })
-        .then(({ data }) => {
-            const { status, payload } = data;
-
-            if (status === 'error') {
-                throw new Error(data.message);
-            }
-
-            return payload;
-        })
+    return api.post(`${authUri}/signup`, { email, password })
         .then((user) => {
             setUser(user);
             return user;
-        })
-        .catch((err) => {
-            const message = (err.response && err.response.data && err.response.data.message) ||
-                err.message || err.toString();
-            throw new Error(message);
         });
-}
+};
 
 const login = (email, password) => {
-    return axios.post(`${apiUrl}/signin`, { email, password })
-        .then(({ data }) => {
-            const { status, payload } = data;
-
-            if (status === 'error') {
-                throw new Error(data.message);
-            }
-
-            return payload;
-        })
+    return api.post(`${authUri}/signin`, { email, password })
         .then((user) => {
             setUser(user);
             return user;
-        })
-        .catch((err) => {
-            const message = (err.response && err.response.data && err.response.data.message) ||
-                err.message || err.toString();
-            throw new Error(message);
         });
-}
+};
 
 const logout = () => {
-    localStorage.removeItem('user');
-}
+    localStorage.removeItem("user");
+};
 
 const setUser = (data) => {
-    localStorage.setItem('user', JSON.stringify(data));
+    localStorage.setItem("user", JSON.stringify(data));
 };
 
 const getUser = () => {
-    const data = localStorage.getItem('user');
+    const data = localStorage.getItem("user");
 
     if (!data) {
-        throw new Error('There is no user data in local storage');
+        throw new Error("There is no user data in local storage");
     }
 
     return JSON.parse(data);
 };
 
-export {
-    signup,
-    login,
-    logout,
-    getUser
+const getToken = () => {
+    const user = getUser();
+    
+    if (!user.accessToken) {
+        throw new Error("There is no access token in user data!");
+    }
+    
+    return user.accessToken;
 };
+
+const isTokenExpired = () => {
+    const token = getToken();
+
+    const jwt = JSON.parse(atob(token.split(".")[1]));
+
+    if (!jwt.exp) {
+        throw new Error('Access token expiration date is no defined!');
+    };
+
+    return (Date.now() > jwt.exp);
+}
+
+export { signup, login, logout, getUser, getToken, isTokenExpired };

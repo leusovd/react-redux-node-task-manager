@@ -17,17 +17,20 @@ module.exports = ({ app }) => {
     //     next(err);
     // });
 
-    app.use((err, req, res, next) => {
-        if (err.name === 'UnauthorizedError') {
-            return res.status(err.code)
-                .send({ status: 'error', message: err.message })
-                .end();
-        }
-        return next(err);
-    });
+    // app.use((err, req, res, next) => {
+    //     if (err.name === 'UnauthorizedError') {
+    //         return res.status(err.code)
+    //             .send({ status: 'error', message: err.message, code: err.code })
+    //             .end();
+    //     }
+    //     return next(err);
+    // });
     
     app.use((err, req, res, next) => {
-        res.status(err.code || 500).send({ status: "error", message: err.message });
+        res.status(err.code || 500).send({ 
+            status: "error", 
+            message: err.message
+        });
     });
 };
 

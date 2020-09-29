@@ -20,7 +20,7 @@ const apiErrorHandler = (err, req, res, next) => {
         statusCode = err.statusCode;
     }
 
-    res.status(statusCode || 400).json(errorObject);
+    res.status(statusCode || 500).json(errorObject);
 }
 
 module.exports = {
