@@ -1,6 +1,6 @@
 import { tasksConstants } from '../../constants';
 import { tasksService } from '../../services';
-import { addNewAlert } from '../alerts.actions';
+import handleErrors from './handle-errors';
 
 const updateRequest = () => {
     return {
@@ -24,13 +24,12 @@ const updateFailure = (error) => {
 
 const updateTask = (dispatch) => (id, property, value) => {
     dispatch(updateRequest());
-    tasksService.patch(id, {[property]: value})
-        .then(() => {
-            dispatch(updateSuccess({ id, property, value }));
+    tasksService.update(id, { property, value })
+        .then((task) => {
+            dispatch(updateSuccess(task));
         })
         .catch((error) => {
-            dispatch(updateFailure(error));
-            addNewAlert(dispatch)(error);
+            handleErrors(dispatch)(error, updateFailure);
         });
 };
 

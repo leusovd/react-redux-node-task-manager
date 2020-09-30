@@ -1,11 +1,15 @@
 const { Router } = require('express');
 const router = new Router();
 const { apiErrorHandler } = require('../../utils');
-const { getAll, post } = require('./task.controller');
+const { getAllTasks, postTask, deleteTask, updateTask } = require('./task.controller');
 const { authJwt } = require('../../middlewares');
 
-router.get('/', authJwt.verifyToken, getAll);
-router.post('/', authJwt.verifyToken, post);
+const { verifyToken } = authJwt;
+
+router.get('/', verifyToken, getAllTasks);
+router.post('/', verifyToken, postTask);
+router.delete('/:id', verifyToken, deleteTask);
+router.patch('/:id', verifyToken, updateTask)
 
 router.use(apiErrorHandler);
 

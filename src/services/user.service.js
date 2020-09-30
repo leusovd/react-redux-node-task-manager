@@ -37,17 +37,16 @@ const getUser = () => {
 };
 
 const getToken = () => {
-    const user = getUser();
-    
-    if (!user.accessToken) {
-        throw new Error("There is no access token in user data!");
-    }
-    
+    const user = getUser();    
     return user.accessToken;
 };
 
 const isTokenExpired = () => {
     const token = getToken();
+
+    if (!token) {
+        return true;
+    }
 
     const jwt = JSON.parse(atob(token.split(".")[1]));
 

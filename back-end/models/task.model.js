@@ -1,7 +1,10 @@
 const { Schema, model } = require('mongoose');
 
 const taskSchema = new Schema({
-    label: String,
+    label: {
+        type: String,
+        required: true
+    },
     important: {
         type: Boolean,
         default: false

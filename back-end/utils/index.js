@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { apiKey } = require('../config');
+const taskHelper = require('./task-helper');
 
 const generateJWT = (userId) => {
     return jwt.sign({ id: userId }, apiKey, {
@@ -25,5 +26,6 @@ const apiErrorHandler = (err, req, res, next) => {
 
 module.exports = {
     generateJWT,
-    apiErrorHandler
+    apiErrorHandler,
+    taskHelper
 };

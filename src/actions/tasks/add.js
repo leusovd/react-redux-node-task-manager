@@ -1,6 +1,6 @@
 import { tasksConstants } from '../../constants';
 import { tasksService } from '../../services';
-import { addNewAlert } from '../alerts.actions';
+import handleErrors from './handle-errors';
 
 const addRequest = () => {
     return {
@@ -26,11 +26,11 @@ const addTask = (dispatch) => (text) => {
     dispatch(addRequest());
     tasksService.post(text)
         .then((data) => {
+            console.log(data);
             dispatch(addSuccess(data));
         })
         .catch((error) => {
-            dispatch(addFailure(error));
-            addNewAlert(dispatch)(error);
+            handleErrors(dispatch)(error, addFailure);
         });
 };
 

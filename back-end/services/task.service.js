@@ -1,26 +1,17 @@
 const { Task } = require('../models');
+const { taskHelper } = require('../utils');
+
+const { taskDocToObject } = taskHelper;
 
 const getAll = async (userId) => {
     const taskList = await Task.find({ user: userId })
         .lean()
         .exec();
 
-    if (!taskList.length) {
-        const error = new Error('Not Found!');
-        error.statusCode = 404;
-        throw error;
-    }
-
-    return taskList.map((task) => {
-        const id = task._id;
-        delete task._id;
-        delete task.user;
-        delete task.__v;
-        return Object.assign(task, { id });
-    });
+    return taskList.map((task) => taskDocToObject(task));
 };
 
-const post = async (userId, { text }) => {
+const post = async (userId, text) => {
     let newTask = new Task({ label: text, user: userId });
     newTask = await newTask.save();
     newTask = newTask.toObject();
@@ -28,7 +19,28 @@ const post = async (userId, { text }) => {
     return newTask;
 };
 
+const deleteOne = async (id) => {
+    const res = await Task.deleteOne({ _id: id });
+
+    if (!res.deletedCount) {
+        const error = new Error('Not Found!');
+        error.statusCode = 404;
+        throw error;
+    }
+};
+
+const update = async (id, property, value) => {
+    const updatedTask = await Task.findByIdAndUpdate(id, { [property]: value }, {
+        returnOriginal: false,
+        useFindAndModify: false
+    }).lean().exec();
+
+    return taskDocToObject(updatedTask);
+};
+
 module.exports = {
     getAll,
-    post
+    update,
+    post,
+    deleteOne
 };

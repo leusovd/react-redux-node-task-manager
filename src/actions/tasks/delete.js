@@ -1,6 +1,6 @@
 import { tasksConstants } from '../../constants';
 import { tasksService } from '../../services';
-import { addNewAlert } from '../alerts.actions';
+import handleErrors from './handle-errors';
 
 const deleteRequest = () => {
     return {
@@ -28,8 +28,7 @@ const deleteTask = (dispatch) => (id) => {
     tasksService.deleteOne(id)
         .then(() => dispatch(deleteSuccess(id)))
         .catch((error) => {
-            dispatch(deleteFailure(error));
-            addNewAlert(dispatch)(error);
+            handleErrors(dispatch)(error, deleteFailure);
         });    
 };
 

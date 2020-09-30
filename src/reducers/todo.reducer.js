@@ -18,13 +18,9 @@ const initialState = {
     filter: "all",
 };
 
-const togglePropertyAndUpdateData = (arr, id, propName, value) => {
-    const index = arr.findIndex((item) => item.id === id);
-    const oldItem = arr[index];
-    const newItem = { ...oldItem };
-    newItem[propName] = value;
-
-    return [...arr.slice(0, index), newItem, ...arr.slice(index + 1)];
+const updateData = (arr, updatedItem) => {
+    const index = arr.findIndex((item) => item.id === updatedItem.id);
+    return [...arr.slice(0, index), updatedItem, ...arr.slice(index + 1)];
 };
 
 const deleteTodoItem = (taskList, id) => {
@@ -47,8 +43,8 @@ const updateTodoData = (state = initialState, action) => {
             return { ...state, loading: false };
 
         case UPDATE_SUCCESS: {
-            const { id, property, value } = action.payload;
-            const updatedTaskList = togglePropertyAndUpdateData(state.taskList, id, property, value);
+            const updatedTask = action.payload;
+            const updatedTaskList = updateData(state.taskList, updatedTask);
             return { ...state, taskList: updatedTaskList };
         };
 

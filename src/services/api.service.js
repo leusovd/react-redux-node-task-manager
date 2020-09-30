@@ -2,19 +2,34 @@ import axios from "axios";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-const get = (uri) => {
-    return request(uri);
+const get = (uri, token) => {
+    return request(uri, { accessToken: token });
 };
 
-const post = (uri, data) => {    
-    return request(uri, { method: 'POST', data });
+const patch = (uri, data, token) => {
+    return request(uri, { method: 'PATCH', data, accessToken: token });
 };
 
-const request = (uri, { method = 'GET', data }) => {
+const post = (uri, data, token) => {    
+    return request(uri, { method: 'POST', data, accessToken: token });
+};
+
+const deleteReq = (uri, token) => {
+    return request(uri, { method: 'DELETE', accessToken: token });
+};
+
+const request = (uri, options = {}) => {
+    const method = options.method || 'GET';
+    const data = options.data || null;
+    const accessToken = options.accessToken || null;
+
     return axios({
         method: method,
         url: `${apiUrl}${uri}`,
-        data: data || null
+        data: data,
+        headers: {
+            'x-access-token': accessToken
+        }
     })
         .then(({ data }) => {
             const { status, payload } = data;
@@ -41,5 +56,7 @@ const request = (uri, { method = 'GET', data }) => {
 
 export {
     get,
-    post
+    patch,
+    post,
+    deleteReq
 };
